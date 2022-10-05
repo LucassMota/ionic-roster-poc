@@ -1,0 +1,7 @@
+{
+  "name": "roster-poc",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
