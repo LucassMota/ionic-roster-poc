@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
-import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
-import { applyDrag, generateItems } from '../utils/utils';
+import {Component, OnInit} from '@angular/core';
+import {ContainerComponent, DraggableComponent} from 'ngx-smooth-dnd';
+import {applyDrag, generateItems} from '../utils/utils';
+import {NoteRepository} from '../repositories/note.repository';
+import {Note} from "../models/Notes";
+
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -19,7 +22,12 @@ const pickColor = () => {
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+
+  notes: Note[] = [];
+
+  constructor(private noteRepository: NoteRepository) {
+  }
 
   scene = {
     type: 'container',
@@ -39,14 +47,14 @@ export class HomePage {
         id: `${i}${j}`,
         props: {
           className: 'card',
-          style: { backgroundColor: pickColor() }
+          style: {backgroundColor: pickColor()}
         },
         data: lorem.slice(0, Math.floor(Math.random() * 150) + 30)
       }))
     }))
-  }
+  };
 
-  items = generateItems(50, i => ({ data: 'Draggable ' + i }))
+  items = generateItems(50, i => ({data: 'Draggable ' + i}));
 
   onColumnDrop(dropResult) {
     const scene = Object.assign({}, this.scene);
@@ -69,13 +77,21 @@ export class HomePage {
   }
 
   getCardPayload(columnId) {
-    return (index) => {
-      return this.scene.children.filter(p => p.id === columnId)[0].children[index];
-    }
+    return (index) => this.scene.children.filter(p => p.id === columnId)[0].children[index];
   }
 
   log(...params) {
     console.log(...params);
+  }
+
+  async getNotes(): Promise<any> {
+    await this.noteRepository.createInitNotes();
+    this.notes = await this.noteRepository.getNotes();
+    console.log('NOTAS:: ', this.notes);
+  }
+
+  ngOnInit(): void {
+    this.getNotes();
   }
 
 }
