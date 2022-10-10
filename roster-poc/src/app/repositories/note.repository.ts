@@ -1,7 +1,7 @@
 import {DatabaseService} from '../services/database.service';
 import {DBSQLiteValues, SQLiteDBConnection} from '@capacitor-community/sqlite';
 import {Note} from '../models/Notes';
-import notesData from '../utils/notes-date';
+import notesData from '../utils/notes-data';
 import {Product} from '../models/Product';
 import {Injectable} from '@angular/core';
 

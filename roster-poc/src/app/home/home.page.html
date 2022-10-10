@@ -13,7 +13,8 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
+  <div id="container" *ngIf="notes.length > 0">
+    {{notes.length > 0}}
     <div class="card-scene">
       <smooth-dnd-container
         [orientation]="'horizontal'"
@@ -36,9 +37,9 @@
               (dragEnd)="log('drag end', $event)"
             >
               <smooth-dnd-draggable *ngFor="let card of column.children">
-                <div [ngClass]="card.props.className" [ngStyle]="card.props.style">
-                  <p>
-                    {{card.data}}
+                <div >
+                    <p>
+                    {{card.description}}
                   </p>
                 </div>
               </smooth-dnd-draggable>
