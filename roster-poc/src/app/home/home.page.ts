@@ -3,6 +3,8 @@ import {ContainerComponent, DraggableComponent} from 'ngx-smooth-dnd';
 import {applyDrag, generateItems} from '../utils/utils';
 import {NoteRepository} from '../repositories/note.repository';
 import {Note} from "../models/Notes";
+import {ModalController} from "@ionic/angular";
+import {UpdateNotesModalPage} from "../pages/update-notes-modal/update-notes-modal.page";
 
 const columnNames = ['Lorem', 'Ipsum', 'Consectetur', 'Eiusmod', 'Cacilds'];
 
@@ -21,7 +23,7 @@ export class HomePage implements OnInit {
 
   notes: Note[] = [];
 
-  constructor(private noteRepository: NoteRepository) {
+  constructor(private noteRepository: NoteRepository, private modalCtrl: ModalController) {
   }
 
   scene: any;
@@ -59,6 +61,29 @@ export class HomePage implements OnInit {
     await this.noteRepository.createInitNotes();
     this.notes = await this.noteRepository.getNotes();
     console.log('NOTAS:: ', this.notes);
+  }
+
+  //////////////////////////////////////////////////////////
+  async openUpdateProductModal(note: Note) {
+    const modal = await this.modalCtrl.create({
+      component: UpdateNotesModalPage,
+      componentProps: {
+        product: Object.assign({}, note)
+      }
+    });
+
+    modal.present();
+
+    const { data: updatedNote, role } = await modal.onWillDismiss<Note>();
+
+    if (role === 'confirm') {
+
+      console.log(`updating product: ${JSON.stringify(updatedNote)}`);
+
+      // await this.noteRepository.updateNote(updatedNote);
+
+      this.notes.splice(this.notes.findIndex(p => p.id === updatedNote.id), 1, updatedNote);
+    }
   }
 
   async ngOnInit(): Promise<void> {

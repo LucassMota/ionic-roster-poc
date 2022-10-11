@@ -13,7 +13,14 @@
     </ion-toolbar>
   </ion-header>
 
+
   <div id="container" *ngIf="notes.length > 0">
+    <div class="crud">
+     <ion-button (click)="openUpdateProductModal(product)" color="primary">
+              <ion-icon name="create"></ion-icon>
+              <ion-text>Edit</ion-text>
+            </ion-button>
+    </div>
     <div class="card-scene">
       <smooth-dnd-container
         [orientation]="'horizontal'"
