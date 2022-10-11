@@ -4,7 +4,7 @@ import {applyDrag, generateItems} from '../utils/utils';
 import {NoteRepository} from '../repositories/note.repository';
 import {Note} from "../models/Notes";
 
-const columnNames = ['Lorem', 'Ipsum', 'Consectetur', 'Eiusmod'];
+const columnNames = ['Lorem', 'Ipsum', 'Consectetur', 'Eiusmod', 'Cacilds'];
 
 const cardColors = ['azure', 'beige', 'bisque', 'blanchedalmond', 'burlywood', 'cornsilk', 'gainsboro', 'ghostwhite', 'ivory', 'khaki'];
 const pickColor = () => {
@@ -69,7 +69,7 @@ export class HomePage implements OnInit {
     props: {
       orientation: 'horizontal'
     },
-    children: generateItems(4, (i) => ({
+    children: generateItems(5, (i) => ({
       id: `column${i}`,
       type: 'container',
       name: columnNames[i],
@@ -80,7 +80,6 @@ export class HomePage implements OnInit {
       children: this.notes
     }))
   };
-    console.log('notes', this.notes);
   }
 
 }
