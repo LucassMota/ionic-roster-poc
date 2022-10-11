@@ -106,6 +106,7 @@ export class HomePage implements OnInit {
   }
 
   async getCategories(): Promise<any> {
+    await  this.categoryRepository.createInitCategory();
     this.categories = await this.categoryRepository.getCategories();
   }
 
@@ -143,10 +144,9 @@ export class HomePage implements OnInit {
 
     if (role === 'confirm') {
       console.log(`creating product: ${JSON.stringify(createdNote)}`);
-
       await this.noteRepository.createNote(createdNote);
-
       this.notes.push(createdNote);
+      window.location.reload();
     }
   }
 

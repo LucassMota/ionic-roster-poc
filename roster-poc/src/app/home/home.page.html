@@ -15,6 +15,10 @@
     </ion-toolbar>
   </ion-header>
 
+  <div *ngIf="notes.length <= 0" class="m-1">
+    <h1>Add a new Note</h1>
+  </div>
+
   <div id="container" *ngIf="notes.length > 0">
     <div class="crud"></div>
     <div class="card-scene">

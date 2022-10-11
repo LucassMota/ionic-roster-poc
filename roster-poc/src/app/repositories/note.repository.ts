@@ -29,7 +29,7 @@ export class NoteRepository {
         const values: Array<any> = [
           note.title,
           note.description,
-          note.idCategory,
+          note.idCategory = 1,
         ];
 
         const ret: any = await db.run(sql, values);
