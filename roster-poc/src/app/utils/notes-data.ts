@@ -3,25 +3,34 @@ import {Note} from '../models/Notes';
 
 const notesData: Note[] = [
   {
-    id: 1,
-    type: 'draggable',
-    title: 'Not 1',
-    description: 'Dscriptions and Descriptions  1 - 1 ',
-    category: 'Cat 1'
+    idNote: 1,
+    title: 'Note 1',
+    description: 'Task 1',
+    idCategory: 1
   },
   {
-    id: 2,
-    type: 'draggable',
-    title: 'Not 2',
-    description: 'Dscriptions and Descriptions  2 ',
-    category: 'Cat 1'
+    idNote: 2,
+    title: 'Note 2',
+    description: 'Task 2 ',
+    idCategory: 1
   },
   {
-    id: 3,
-    type: 'draggable',
-    title: 'Not 3',
-    description: 'Dscriptions and Descriptions  3',
-    category: 'Cat 2'
+    idNote: 3,
+    title: 'Note 3',
+    description: 'Task 3',
+    idCategory: 2
+  },
+  {
+    idNote: 4,
+    title: 'Note 4',
+    description: 'task 4',
+    idCategory: 2
+  },
+  {
+    idNote: 5,
+    title: 'Note 5',
+    description: 'Task 5',
+    idCategory: 1
   }
   ];
 

@@ -1,7 +1,6 @@
 export interface Note {
-  id: number;
-  type: 'draggable';
+  idNote: number;
   title: string;
   description: string;
-  category: string;
+  idCategory: number;
 }
