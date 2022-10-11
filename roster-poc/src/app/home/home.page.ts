@@ -69,7 +69,36 @@ export class HomePage implements OnInit {
   }
 
   log(...params) {
-    console.log(...params);
+    // console.log(...params);
+  }
+
+  updateCategoryItem(event){
+     setTimeout(()=> {
+       if(event.isSource) {
+         const item = Object.assign(event?.payload);
+         const noteUpdate: Notes[] = [];
+
+         this.scene.children.forEach( (category) => {
+           category.children.forEach( i => {
+             if (i.idNote === item.idNote){
+               noteUpdate.push( {
+                 description: i.description,
+                 title: i.title,
+                 idCategory: category.id,
+                 idNote: i.idNote
+               });
+             }
+           });
+         });
+
+         if(noteUpdate.length > 0 ){
+           noteUpdate.forEach(async n => {
+             await this.noteRepository.updateNote(n);
+           });
+         }
+       }
+
+    },200);
   }
 
   async getNotes(): Promise<any> {
@@ -126,22 +155,21 @@ export class HomePage implements OnInit {
     await this.getNotes();
 
     this.scene = {
+    type: 'container',
+    props: {
+      orientation: 'horizontal'
+    },
+    children: generateItems(this.categories?.length, (i) => ({
+      id: this.categories[i].idCategory,
       type: 'container',
+      name: this.categories[i].title,
       props: {
-        orientation: 'horizontal',
+        orientation: 'vertical',
+        className: 'card-container'
       },
-      children: generateItems(this.categories?.length, (i) => ({
-        id: `column${i}`,
-        type: 'container',
-        name: this.categories[i].title,
-        props: {
-          orientation: 'vertical',
-          className: 'card-container',
-        },
-        children: this.notes?.filter(
-          (n) => n.idCategory === this.categories[i].idCategory
-        ),
-      })),
-    };
+      children: this.notes?.filter( n => n.idCategory === this.categories[i].idCategory)
+    }))
+  };
   }
+
 }
