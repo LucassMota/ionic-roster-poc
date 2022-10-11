@@ -21,8 +21,8 @@ export class NoteRepository {
 
   async createNote(note: Note){
     return this.databaseService.executeQuery<any>(async (db: SQLiteDBConnection) => {
-      const sql = 'insert into notes (title, description, category) values (?, ?, ?)';
-      const values: Array<any> = [note.title, note.description, note.category];
+      const sql = 'insert into notes (title, description, idCategory) values (?, ?, ?)';
+      const values: Array<any> = [note.title, note.description, note.idCategory];
 
       const ret: any = await db.run(sql, values);
 

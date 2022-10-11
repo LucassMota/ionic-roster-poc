@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ContainerComponent, DraggableComponent} from 'ngx-smooth-dnd';
 import {applyDrag, generateItems} from '../utils/utils';
 import {NoteRepository} from '../repositories/note.repository';
-import {Note} from "../models/Notes";
+import {CategoryRepository} from '../repositories/category.repository';
+import {Note} from '../models/Notes';
+import {Category} from '../models/Categories';
 
-const columnNames = ['Lorem', 'Ipsum', 'Consectetur', 'Eiusmod', 'Cacilds'];
 
 const cardColors = ['azure', 'beige', 'bisque', 'blanchedalmond', 'burlywood', 'cornsilk', 'gainsboro', 'ghostwhite', 'ivory', 'khaki'];
 const pickColor = () => {
@@ -20,12 +21,12 @@ const pickColor = () => {
 export class HomePage implements OnInit {
 
   notes: Note[] = [];
+  categories: Category[] = [];
 
-  constructor(private noteRepository: NoteRepository) {
+  constructor(private noteRepository: NoteRepository, private categoryRepository: CategoryRepository) {
   }
 
   scene: any;
-  items = generateItems(50, i => ({data: 'Draggable ' + i}));
 
   onColumnDrop(dropResult) {
     const scene = Object.assign({}, this.scene);
@@ -61,7 +62,14 @@ export class HomePage implements OnInit {
     console.log('NOTAS:: ', this.notes);
   }
 
+  async getCategories(): Promise<any> {
+    await this.categoryRepository.createInitCategory();
+    this.categories = await this.categoryRepository.getCategories();
+    console.log('categorias:: ', this.categories);
+  }
+
   async ngOnInit(): Promise<void> {
+    await this.getCategories();
     await this.getNotes();
 
     this.scene = {
@@ -69,15 +77,15 @@ export class HomePage implements OnInit {
     props: {
       orientation: 'horizontal'
     },
-    children: generateItems(5, (i) => ({
+    children: generateItems(this.categories?.length, (i) => ({
       id: `column${i}`,
       type: 'container',
-      name: columnNames[i],
+      name: this.categories[i].title,
       props: {
         orientation: 'vertical',
         className: 'card-container'
       },
-      children: this.notes
+      children: this.notes?.filter( n => n.idCategory === this.categories[i].idCategory)
     }))
   };
   }

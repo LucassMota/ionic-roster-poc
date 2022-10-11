@@ -19,10 +19,20 @@ CREATE TABLE IF NOT EXISTS products (
 
 export const createSchemaNotes = `
 CREATE TABLE IF NOT EXISTS notes (
-  id INTEGER PRIMARY KEY NOT NULL,
+  idNote INTEGER PRIMARY KEY NOT NULL,
   title TEXT DEFAULT '',
   description TEXT DEFAULT '',
-  category TEXT DEFAULT '',
+  idCategory INTEGER DEFAULT '',
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(idCategory) REFERENCES category(idCategory)
+  );
+`;
+
+
+export const createSchemaCategory = `
+CREATE TABLE IF NOT EXISTS category (
+  idCategory INTEGER PRIMARY KEY NOT NULL,
+  title TEXT DEFAULT '',
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 `;
@@ -43,8 +53,8 @@ export class MigrationService {
   async migrate(): Promise<any> {
     await this.createTestTable();
     await this.createProductsTable();
+    await this.createCategoryTable();
     await this.createNotesTable();
-
 
   }
 
@@ -72,6 +82,13 @@ export class MigrationService {
     console.log(`res: ${JSON.stringify(res)}`);
     await this.sqliteService.closeConnection(environment.databaseName);
     console.log(`after closeConnection`);
+  }
+
+  async createCategoryTable(): Promise<any> {
+    await this.databaseService.executeQuery(async (db) => {
+      await  db.execute(createSchemaCategory);
+      console.log('create Category table');
+    });
   }
 
 

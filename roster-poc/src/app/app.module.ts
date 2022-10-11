@@ -14,6 +14,7 @@ import {DatabaseService} from './services/database.service';
 import { SQLiteService } from './services/sqlite.service';
 import { DetailService } from './services/detail.service';
 import {ProductRepository} from './repositories/product.repository';
+import {CategoryRepository} from './repositories/category.repository';
 import {NoteRepository} from './repositories/note.repository';
 
 
@@ -37,7 +38,8 @@ export function initializeFactory(init: InitializeAppService) {
     DetailService,
     DatabaseService,
     ProductRepository,
-    NoteRepository
+    NoteRepository,
+    CategoryRepository
   ],
   bootstrap: [AppComponent],
 })
