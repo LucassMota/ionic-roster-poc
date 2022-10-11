@@ -22,7 +22,11 @@ const routes: Routes = [
   {
     path: 'update-notes-modal',
     loadChildren: () => import('./pages/update-notes-modal/update-notes-modal.module').then( m => m.UpdateNotesModalPageModule)
+  },  {
+    path: 'create-notes-modal',
+    loadChildren: () => import('./pages/create-notes-modal/create-notes-modal.module').then( m => m.CreateNotesModalPageModule)
   },
+
 
 ];
 

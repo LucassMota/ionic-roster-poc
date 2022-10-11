@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-title>Update Note</ion-title>
+    <ion-title>Create Note</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="confirm()">Save</ion-button>
     </ion-buttons>
@@ -12,6 +12,6 @@
 <ion-content class="ion-padding">
   <ion-item>
     <ion-label position="stacked">Description</ion-label>
-    <ion-input type="text" [(ngModel)]="notes.description" placeholder="Description name" required></ion-input>
+    <ion-input type="text" [(ngModel)]="note.description" placeholder="description name" required></ion-input>
   </ion-item>
 </ion-content>

@@ -1,26 +1,22 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+
+    <ion-buttons slot="start">
+      <ion-button (click)="openCreateNoteModal()" color="primary">
+        <ion-text>Add Note</ion-text>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
     </ion-toolbar>
   </ion-header>
 
-
   <div id="container" *ngIf="notes.length > 0">
-    <div class="crud">
-     <ion-button (click)="openUpdateProductModal(product)" color="primary">
-              <ion-icon name="create"></ion-icon>
-              <ion-text>Edit</ion-text>
-            </ion-button>
-    </div>
+    <div class="crud"></div>
     <div class="card-scene">
       <smooth-dnd-container
         [orientation]="'horizontal'"
@@ -43,8 +39,8 @@
               (dragEnd)="log('drag end', $event)"
             >
               <smooth-dnd-draggable *ngFor="let card of column.children">
-                <div >
-                    <p>
+                <div>
+                  <p (click)="openUpdateNoteModal(card)" style="cursor: pointer; color: blue; font-weight: bolder;">
                     {{card.description}}
                   </p>
                 </div>

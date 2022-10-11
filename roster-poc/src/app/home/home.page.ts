@@ -1,17 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {ContainerComponent, DraggableComponent} from 'ngx-smooth-dnd';
-import {applyDrag, generateItems} from '../utils/utils';
-import {NoteRepository} from '../repositories/note.repository';
-import {Note} from "../models/Notes";
-import {ModalController} from "@ionic/angular";
-import {UpdateNotesModalPage} from "../pages/update-notes-modal/update-notes-modal.page";
-import {CategoryRepository} from '../repositories/category.repository';
-import {Category} from '../models/Categories';
+import { Component, OnInit } from '@angular/core';
+import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
+import { applyDrag, generateItems } from '../utils/utils';
+import { NoteRepository } from '../repositories/note.repository';
+import { Notes } from '../models/Notes';
+import { ModalController } from '@ionic/angular';
+import { UpdateNotesModalPage } from '../pages/update-notes-modal/update-notes-modal.page';
+import { CategoryRepository } from '../repositories/category.repository';
+import { Category } from '../models/Categories';
+import { CreateNotesModalPage } from '../pages/create-notes-modal/create-notes-modal.page';
 
-
-const cardColors = ['azure', 'beige', 'bisque', 'blanchedalmond', 'burlywood', 'cornsilk', 'gainsboro', 'ghostwhite', 'ivory', 'khaki'];
+const cardColors = [
+  'azure',
+  'beige',
+  'bisque',
+  'blanchedalmond',
+  'burlywood',
+  'cornsilk',
+  'gainsboro',
+  'ghostwhite',
+  'ivory',
+  'khaki',
+];
 const pickColor = () => {
-  const rand = Math.floor((Math.random() * 10));
+  const rand = Math.floor(Math.random() * 10);
   return cardColors[rand];
 };
 
@@ -21,12 +32,14 @@ const pickColor = () => {
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-
-  notes: Note[] = [];
+  notes: Notes[] = [];
   categories: Category[] = [];
 
-  constructor(private noteRepository: NoteRepository, private categoryRepository: CategoryRepository, private modalCtrl: ModalController) {}
-
+  constructor(
+    private noteRepository: NoteRepository,
+    private categoryRepository: CategoryRepository,
+    private modalCtrl: ModalController
+  ) {}
 
   scene: any;
 
@@ -39,7 +52,7 @@ export class HomePage implements OnInit {
   onCardDrop(columnId, dropResult) {
     if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
       const scene = Object.assign({}, this.scene);
-      const column = scene.children.filter(p => p.id === columnId)[0];
+      const column = scene.children.filter((p) => p.id === columnId)[0];
       const columnIndex = scene.children.indexOf(column);
 
       const newColumn = Object.assign({}, column);
@@ -51,7 +64,8 @@ export class HomePage implements OnInit {
   }
 
   getCardPayload(columnId) {
-    return (index) => this.scene.children.filter(p => p.id === columnId)[0].children[index];
+    return (index) =>
+      this.scene.children.filter((p) => p.id === columnId)[0].children[index];
   }
 
   log(...params) {
@@ -59,37 +73,51 @@ export class HomePage implements OnInit {
   }
 
   async getNotes(): Promise<any> {
-    await this.noteRepository.createInitNotes();
     this.notes = await this.noteRepository.getNotes();
-    console.log('NOTAS:: ', this.notes);
   }
 
   async getCategories(): Promise<any> {
-    await this.categoryRepository.createInitCategory();
     this.categories = await this.categoryRepository.getCategories();
-    console.log('categorias:: ', this.categories);
   }
 
-  //////////////////////////////////////////////////////////
-  async openUpdateProductModal(note: Note) {
+  async openUpdateNoteModal(note: Notes) {
     const modal = await this.modalCtrl.create({
       component: UpdateNotesModalPage,
       componentProps: {
-        product: Object.assign({}, note)
-      }
+        notes: Object.assign({}, note),
+      },
     });
 
     modal.present();
 
-    const { data: updatedNote, role } = await modal.onWillDismiss<Note>();
+    const { data: updatedNote, role } = await modal.onWillDismiss<Notes>();
 
     if (role === 'confirm') {
+      await this.noteRepository.updateNote(updatedNote);
 
-      console.log(`updating product: ${JSON.stringify(updatedNote)}`);
+      this.notes.splice(
+        this.notes.findIndex((p) => p.idNote === updatedNote.idNote),
+        1,
+        updatedNote
+      );
+      window.location.reload();
+    }
+  }
 
-      // await this.noteRepository.updateNote(updatedNote);
+  async openCreateNoteModal() {
+    const modal = await this.modalCtrl.create({
+      component: CreateNotesModalPage,
+    });
 
-      this.notes.splice(this.notes.findIndex(p => p.id === updatedNote.id), 1, updatedNote);
+    modal.present();
+    const { data: createdNote, role } = await modal.onWillDismiss<Notes>();
+
+    if (role === 'confirm') {
+      console.log(`creating product: ${JSON.stringify(createdNote)}`);
+
+      await this.noteRepository.createNote(createdNote);
+
+      this.notes.push(createdNote);
     }
   }
 
@@ -98,21 +126,22 @@ export class HomePage implements OnInit {
     await this.getNotes();
 
     this.scene = {
-    type: 'container',
-    props: {
-      orientation: 'horizontal'
-    },
-    children: generateItems(this.categories?.length, (i) => ({
-      id: `column${i}`,
       type: 'container',
-      name: this.categories[i].title,
       props: {
-        orientation: 'vertical',
-        className: 'card-container'
+        orientation: 'horizontal',
       },
-      children: this.notes?.filter( n => n.idCategory === this.categories[i].idCategory)
-    }))
-  };
+      children: generateItems(this.categories?.length, (i) => ({
+        id: `column${i}`,
+        type: 'container',
+        name: this.categories[i].title,
+        props: {
+          orientation: 'vertical',
+          className: 'card-container',
+        },
+        children: this.notes?.filter(
+          (n) => n.idCategory === this.categories[i].idCategory
+        ),
+      })),
+    };
   }
-
 }

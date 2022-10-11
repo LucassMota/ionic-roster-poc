@@ -1,18 +1,16 @@
 import { Component } from '@angular/core';
-import {Note} from '../../models/Notes';
-import {ModalController} from '@ionic/angular';
+import { Notes } from '../../models/Notes';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-update-notes-modal',
   templateUrl: './update-notes-modal.page.html',
   styleUrls: ['./update-notes-modal.page.scss'],
 })
-
 export class UpdateNotesModalPage {
-  notes: Note;
+  notes: Notes;
 
-  constructor(private modalCtrl: ModalController) { }
-
+  constructor(private modalCtrl: ModalController) {}
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
@@ -24,4 +22,3 @@ export class UpdateNotesModalPage {
     }
   }
 }
-
