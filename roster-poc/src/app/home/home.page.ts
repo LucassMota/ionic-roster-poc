@@ -34,6 +34,7 @@ const pickColor = () => {
 export class HomePage implements OnInit {
   notes: Notes[] = [];
   categories: Category[] = [];
+  orientation: string;
 
   constructor(
     private noteRepository: NoteRepository,
@@ -72,33 +73,32 @@ export class HomePage implements OnInit {
     // console.log(...params);
   }
 
-  updateCategoryItem(event){
-     setTimeout(()=> {
-       if(event.isSource) {
-         const item = Object.assign(event?.payload);
-         const noteUpdate: Notes[] = [];
+  updateCategoryItem(event) {
+    setTimeout(() => {
+      if (event.isSource) {
+        const item = Object.assign(event?.payload);
+        const noteUpdate: Notes[] = [];
 
-         this.scene.children.forEach( (category) => {
-           category.children.forEach( i => {
-             if (i.idNote === item.idNote){
-               noteUpdate.push( {
-                 description: i.description,
-                 title: i.title,
-                 idCategory: category.id,
-                 idNote: i.idNote
-               });
-             }
-           });
-         });
+        this.scene.children.forEach((category) => {
+          category.children.forEach((i) => {
+            if (i.idNote === item.idNote) {
+              noteUpdate.push({
+                description: i.description,
+                title: i.title,
+                idCategory: category.id,
+                idNote: i.idNote,
+              });
+            }
+          });
+        });
 
-         if(noteUpdate.length > 0 ){
-           noteUpdate.forEach(async n => {
-             await this.noteRepository.updateNote(n);
-           });
-         }
-       }
-
-    },200);
+        if (noteUpdate.length > 0) {
+          noteUpdate.forEach(async (n) => {
+            await this.noteRepository.updateNote(n);
+          });
+        }
+      }
+    }, 200);
   }
 
   async getNotes(): Promise<any> {
@@ -106,7 +106,7 @@ export class HomePage implements OnInit {
   }
 
   async getCategories(): Promise<any> {
-    await  this.categoryRepository.createInitCategory();
+    await this.categoryRepository.createInitCategory();
     this.categories = await this.categoryRepository.getCategories();
   }
 
@@ -151,25 +151,32 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    if (window.matchMedia('(max-width: 500px)').matches) {
+      this.orientation = 'vertical';
+    } else {
+      this.orientation = 'horizontal';
+    }
+
     await this.getCategories();
     await this.getNotes();
 
     this.scene = {
-    type: 'container',
-    props: {
-      orientation: 'horizontal'
-    },
-    children: generateItems(this.categories?.length, (i) => ({
-      id: this.categories[i].idCategory,
       type: 'container',
-      name: this.categories[i].title,
       props: {
-        orientation: 'vertical',
-        className: 'card-container'
+        orientation: 'horizontal',
       },
-      children: this.notes?.filter( n => n.idCategory === this.categories[i].idCategory)
-    }))
-  };
+      children: generateItems(this.categories?.length, (i) => ({
+        id: this.categories[i].idCategory,
+        type: 'container',
+        name: this.categories[i].title,
+        props: {
+          orientation: 'vertical',
+          className: 'card-container',
+        },
+        children: this.notes?.filter(
+          (n) => n.idCategory === this.categories[i].idCategory
+        ),
+      })),
+    };
   }
-
 }
