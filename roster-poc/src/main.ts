@@ -18,6 +18,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   const sqlite: SQLiteConnection = new SQLiteConnection(CapacitorSQLite);
   try {
 
+    console.log('plat:', plat);
+
     if(plat === 'web') {
       console.log('111 in index.ts');
       const jeepEl = document.createElement('jeep-sqlite');
