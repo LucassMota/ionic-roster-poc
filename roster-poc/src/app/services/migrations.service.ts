@@ -23,8 +23,7 @@ CREATE TABLE IF NOT EXISTS notes (
   title TEXT DEFAULT '',
   description TEXT DEFAULT '',
   idCategory INTEGER DEFAULT '',
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(idCategory) REFERENCES category(idCategory)
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 `;
 
