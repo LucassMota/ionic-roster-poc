@@ -11,10 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'products',
-    loadChildren: () => import('./pages/products/products.module').then( m => m.ProductsPageModule)
-  },
+  // {
+  //   path: 'products',
+  //   loadChildren: () => import('./pages/products/products.module').then( m => m.ProductsPageModule)
+  // },
   // {
   //   path: 'notes',
   //   loadChildren: () => import('./pages/notes/notes.module').then( m => m.NotesPageModule)
@@ -22,7 +22,8 @@ const routes: Routes = [
   {
     path: 'update-notes-modal',
     loadChildren: () => import('./pages/update-notes-modal/update-notes-modal.module').then( m => m.UpdateNotesModalPageModule)
-  },  {
+  },
+  {
     path: 'create-notes-modal',
     loadChildren: () => import('./pages/create-notes-modal/create-notes-modal.module').then( m => m.CreateNotesModalPageModule)
   },

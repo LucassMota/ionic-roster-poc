@@ -14,7 +14,7 @@ export class InitializeAppService {
     await this.sqliteService.initializePlugin().then(async (ret) => {
       try {
         //execute startup queries
-
+        console.log('Start Migrate');
         await this.migrationService.migrate();
 
       } catch (error) {

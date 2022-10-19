@@ -4,13 +4,14 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { defineCustomElements as jeepSqlite} from 'jeep-sqlite/loader';
+import { defineCustomElements as pwaElements} from '@ionic/pwa-elements/loader';
 import {Capacitor} from '@capacitor/core';
 import { CapacitorSQLite, SQLiteConnection } from '@capacitor-community/sqlite';
 
 if (environment.production) {
   enableProdMode();
 }
-
+pwaElements(window);
 jeepSqlite(window);
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -28,12 +29,13 @@ window.addEventListener('DOMContentLoaded', async () => {
       await sqlite.initWebStore();
       console.log('after sqlite.initWebStore()');
     }
-    await sqlite.checkConnectionsConsistency();
+    sqlite.checkConnectionsConsistency().then(()=>{
+      console.log('checkConnectionsConsistency - OK');
+    });
 
     platformBrowserDynamic().bootstrapModule(AppModule)
-      .catch(err => console.log(err));
+      .catch(err => console.error(`PlatformBrowserDynamic - Error: ${err}`));
   } catch (err) {
-    console.log(`Error: ${err}`);
     throw new Error(`Error: ${err}`);
   }
 
