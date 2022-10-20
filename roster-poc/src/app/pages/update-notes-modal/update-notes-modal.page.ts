@@ -21,4 +21,8 @@ export class UpdateNotesModalPage {
       return this.modalCtrl.dismiss(this.notes, 'confirm');
     }
   }
+
+  deleteNote(){
+    return this.modalCtrl.dismiss(this.notes, 'delete');
+  }
 }

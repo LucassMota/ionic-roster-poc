@@ -90,4 +90,26 @@ export class NoteRepository {
       await this.createNote(p);
     }
   }
+
+    async deleteNote(idNote: number) {
+        return  this.databaseService.executeQuery<any>(
+        //     async (db: SQLiteDBConnection) => {
+        //         const sqlcmd = 'DELETE FROM notes WHERE idNote = ?';
+        //         const values: Array<any> = [idNote];
+        //         const ret: any = await db.query(sqlcmd, values);
+        //
+        //         if (ret.values.length > 0) {
+        //             return true
+        //         }
+        //         throw Error(' ->> delete note by id failed');
+        //     }
+
+
+            async (db: SQLiteDBConnection) => {
+                await db.query(`delete from notes where idNote = ${idNote};`);
+            }
+
+        );
+
+    }
 }
