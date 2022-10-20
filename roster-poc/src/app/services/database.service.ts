@@ -3,7 +3,7 @@ import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { environment } from 'src/environments/environment';
 import { SQLiteService } from './sqlite.service';
 
-type SQLiteDBConnectionCallback<T> = (myArguments: SQLiteDBConnection) => T;
+interface SQLiteDBConnectionCallback<T> { (myArguments: SQLiteDBConnection): T }
 
 @Injectable()
 export class DatabaseService {
@@ -13,23 +13,22 @@ export class DatabaseService {
 
   /**
    * this function will handle the sqlite isopen and isclosed automatically for you.
-   *
    * @param callback: The callback function that will execute multiple SQLiteDBConnection commands or other stuff.
    * @param databaseName optional another database name
    * @returns any type you want to receive from the callback function.
    */
   async executeQuery<T>(callback: SQLiteDBConnectionCallback<T>, databaseName: string = environment.databaseName): Promise<T> {
     try {
-      const isConnection = await this.sqlite.isConnection(databaseName);
+      let isConnection = await this.sqlite.isConnection(databaseName);
 
       if (isConnection.result) {
-        const db = await this.sqlite.retrieveConnection(databaseName);
+        let db = await this.sqlite.retrieveConnection(databaseName);
         return await callback(db);
       }
       else {
-        const db = await this.sqlite.createConnection(databaseName, false, 'no-encryption', 1);
+        const db = await this.sqlite.createConnection(databaseName, false, "no-encryption", 1);
         await db.open();
-        const cb = await callback(db);
+        let cb = await callback(db);
         await this.sqlite.closeConnection(databaseName);
         return cb;
       }

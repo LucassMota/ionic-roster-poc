@@ -5,12 +5,32 @@ const config: CapacitorConfig = {
   appName: 'roster-poc',
   webDir: 'www',
   bundledWebRuntime: false,
+  loggingBehavior: 'debug',
   plugins: {
     CapacitorSQLite: {
-      electronMacLocation: "/YOUR_DATABASES_PATH",
-      electronWindowsLocation: "C:\\Temp\\CapacitorDatabases",
-      electronLinuxLocation: "/home/CapacitorDatabases"
+      iosDatabaseLocation: 'Library/CapacitorDatabase',
+      iosIsEncryption: true,
+      iosKeychainPrefix: 'angular-sqlite-app-starter',
+      iosBiometric: {
+        biometricAuth: false,
+        biometricTitle : "Biometric login for capacitor sqlite"
+      },
+      androidIsEncryption: true,
+      androidBiometric: {
+        biometricAuth : false,
+        biometricTitle : "Biometric login for capacitor sqlite",
+        biometricSubTitle : "Log in using your biometric"
+      },
+      electronWindowsLocation: "C:\\temp\\CapacitorDatabases",
+      electronMacLocation: "/Volumes/Development_Lacie/Development/CapacitorDatabases",
+      electronLinuxLocation: "Databases"
     }
-  }};
+  }
+};
 
 export default config;
+/*
+
+
+
+*/
