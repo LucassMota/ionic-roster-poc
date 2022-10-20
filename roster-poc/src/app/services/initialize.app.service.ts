@@ -11,6 +11,7 @@ export class InitializeAppService {
 
 
   async initializeApp() {
+    console.log('initalizeApp');
     await this.sqliteService.initializePlugin().then(async (ret) => {
       try {
         //execute startup queries
