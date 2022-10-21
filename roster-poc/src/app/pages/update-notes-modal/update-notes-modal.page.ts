@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Notes } from '../../models/Notes';
-import { ModalController } from '@ionic/angular';
+import {AlertController, ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-update-notes-modal',
@@ -10,7 +10,7 @@ import { ModalController } from '@ionic/angular';
 export class UpdateNotesModalPage {
   notes: Notes;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private modalCtrl: ModalController, private alertController: AlertController) {}
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
@@ -22,7 +22,25 @@ export class UpdateNotesModalPage {
     }
   }
 
-  deleteNote(){
-    return this.modalCtrl.dismiss(this.notes, 'delete');
-  }
+  async deleteNote(){
+    const alert = await this.alertController.create({
+      header: 'Do you want to delete this note?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+            return this.modalCtrl.dismiss(this.notes, 'delete');
+          },
+        },
+      ],
+    });
+    await alert.present();
+    }
+
+
 }

@@ -135,11 +135,9 @@ export class HomePage implements OnInit {
 
     if (role === 'delete') {
 
-      const result = window.confirm('Do you want to delete this note?');
-      if(result){
         await this.noteRepository.deleteNote(updatedNote.idNote)
         window.location.reload();
-      }
+
     }
   }
 
